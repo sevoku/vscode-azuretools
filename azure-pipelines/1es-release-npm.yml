@@ -28,7 +28,7 @@ resources:
       ref: refs/heads/release
 
 extends:
-  template: v1/1ES.Official.PipelineTemplate.yml@1esPipelines
+  template: azure-pipelines/MicroBuild.1ES.Official.Publish.yml@MicroBuildTemplate
   parameters:
     sdl:
       credscan:
@@ -72,24 +72,24 @@ extends:
                       exit 1
                     fi
                   workingDirectory: $(System.DefaultWorkingDirectory)
-              - template: azure-pipelines/MicroBuild.Publish.yml@MicroBuildTemplate
-                parameters:
-                  intent: "PackageDistribution"
-                  contentType: "npm"
-                  contentSource: "Folder"
-                  folderLocation: "$(System.DefaultWorkingDirectory)/$(TarballFolder)"
-                  waitForReleaseCompletion: true
-                  owners: "${{ parameters.OwnerAlias }}@microsoft.com"
-                  approvers: "${{ parameters.ApproverAlias }}@microsoft.com"
-              - task: GitHubRelease@1
-                displayName: "\U0001F449 GitHub release (create)"
-                inputs:
-                  gitHubConnection: "GitHub-AzureTools"
-                  tagSource: userSpecifiedTag
-                  tag: "${{ parameters.PackageToPublish }}-v$(Version)"
-                  title: "${{ parameters.PackageToPublish }} v$(Version)"
-                  releaseNotesSource: inline
-                  assets: "$(System.DefaultWorkingDirectory)/$(TarballPath)"
-                  isDraft: true
-                  isPreRelease: true
-                  addChangeLog: false
+              # - template: azure-pipelines/MicroBuild.Publish.yml@MicroBuildTemplate
+              #   parameters:
+              #     intent: "PackageDistribution"
+              #     contentType: "npm"
+              #     contentSource: "Folder"
+              #     folderLocation: "$(System.DefaultWorkingDirectory)/$(TarballFolder)"
+              #     waitForReleaseCompletion: true
+              #     owners: "${{ parameters.OwnerAlias }}@microsoft.com"
+              #     approvers: "${{ parameters.ApproverAlias }}@microsoft.com"
+              # - task: GitHubRelease@1
+              #   displayName: "\U0001F449 GitHub release (create)"
+              #   inputs:
+              #     gitHubConnection: "GitHub-AzureTools"
+              #     tagSource: userSpecifiedTag
+              #     tag: "${{ parameters.PackageToPublish }}-v$(Version)"
+              #     title: "${{ parameters.PackageToPublish }} v$(Version)"
+              #     releaseNotesSource: inline
+              #     assets: "$(System.DefaultWorkingDirectory)/$(TarballPath)"
+              #     isDraft: true
+              #     isPreRelease: true
+              #     addChangeLog: false
